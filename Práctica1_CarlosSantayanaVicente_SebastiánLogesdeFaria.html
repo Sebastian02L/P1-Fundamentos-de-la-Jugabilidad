@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html> 
+    <head> 
+        <title> Practica 1</title>
+    </head>
+
+    <body>
+
+        <p>Pulse "Fabricar 100" para simular la fabricación de 100 piezas.</p>
+        <br>
+        <p>Pulse "Fabricar 1000" para simular la fabricación de 1000 piezas.</p>
+        <br>
+        <p>Resultado de la simulacion.</p>
+
+
+        <button id="boton1" > Fabricar 100 </button>
+        <button id="boton2" > Fabricar 1000 </button>
+        <script> 
+        //CLASE FABRICA
+        function fabrica(){
+            this.factoria = new factoria();
+            this.estacion = new estacion();
+
+            //FUNCIONES
+            this.fabricar = function(){
+                factoria.generarPieza();
+            }
+        }
+        
+        //CLASE FACTORIA
+        function factoria(){
+            //ATRIBUTOS DE CLASE
+            this.contadorPiezas = 0;
+            this.contadorPiezasElectricas = 0;
+            this.contadorPiezasMecanicas = 0;
+
+            //FUNCIONES/MÉTODOS DE LA CLASE
+            this.generarPieza = function(){
+                contadorPiezas += 1;
+            }
+        }
+
+        //CLASE ESTACION
+        function estacion(){
+            //ATRIBUTOSS
+
+            //FUNCIONES
+            this.procesarPieza = function(){
+
+            }
+        }
+        
+        //CLASE PIEZA
+        function piezaBase(){
+            //ATRIBUTOS
+            this.nombre;
+            this.codigo;
+            this.fecha;
+        }
+
+
+
+        //CLASE PIEZA ELECTRICA
+        function piezaElectrica(){
+            this.potencia;
+            this.voltaje;
+        }
+
+        piezaElectrica.prototype = new piezaBase();
+
+        //CLASE PIEZA MECANICA
+        function piezaMecanica(){
+            this.material;
+        }
+
+        piezaMecanica.prototype = new piezaBase();
+
+        //Funciones adicionales para la elaboración de la práctica
+
+        //Devuelve un numero aleatorio entre 0 y max-1, ambos incluidos
+        function obtenerEnteroAleatorio(max){
+            return Math.floor(Math.random()* max)
+        }
+
+
+        
+        </script>
+    </body>
+</html>
