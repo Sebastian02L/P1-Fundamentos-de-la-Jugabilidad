@@ -1,89 +1,237 @@
 <!DOCTYPE html>
-<html> 
-    <head> 
+<html>
+    <head>
         <title> Practica 1</title>
     </head>
 
     <body>
-
+        <!--Parrafos de la pagina.-->
         <p>Pulse "Fabricar 100" para simular la fabricación de 100 piezas.</p>
         <br>
         <p>Pulse "Fabricar 1000" para simular la fabricación de 1000 piezas.</p>
         <br>
-        <p>Resultado de la simulacion.</p>
+        <p id="resultado">Resultado de la simulacion.</p>
 
+        <!--Botones de fabricacion.-->
+        <button id="boton1"> Fabricar 100 </button>
+        <button id="boton2"> Fabricar 1000 </button>
 
-        <button id="boton1" > Fabricar 100 </button>
-        <button id="boton2" > Fabricar 1000 </button>
-        <script> 
-        //CLASE FABRICA
-        function fabrica(){
-            this.factoria = new factoria();
-            this.estacion = new estacion();
+        <script>
+            //VARIABLES GLOBALES
+            var tiempo = new Date();
+            var arrayDePiezas = new Array();
+            var parrafo = document.getElementById("resultado");
 
-            //FUNCIONES
-            this.fabricar = function(){
-                factoria.generarPieza();
+            /////////////////////////////////////////////////////// CLASES ///////////////////////////////////////////////////////
+
+            //CLASE FABRICA
+            function Fabrica(numPiezasParameter) {
+                //ATRIBUTOS
+                this.numPiezasAtribute = numPiezasParameter;
+                this.factoria = new Factoria();
+                this.estacion = new Estacion();
+
+                //FUNCIONES
+                this.fabricar = function () {
+                    //FABRICACION DE 100 PIEZAS
+                    if (this.numPiezasAtribute == 100) {
+                        for (var i = 0; i < 100; ++i) {
+                            this.factoria.generarPieza();
+                        } for (var i = 0; i < 100; ++i) {
+                            this.estacion.procesarPieza(i);
+                        }
+
+                        //FABRICACION DE 1000 PIEZAS
+                    } else {
+                        for (var i = 0; i < 1000; ++i) {
+                            this.factoria.generarPieza();
+                        }
+                        for (var i = 0; i < 1000; ++i) {
+                            this.estacion.procesarPieza(i);
+                        }
+                    }
+
+                    parrafo.innerHTML = "Piezas totales:<br>" +
+                        "La factoría ha fabricado " + this.factoria.contadorPiezas + " de las cuales " + this.factoria.contadorPiezasElectricas + " son de tipo eléctrico y " + this.factoria.contadorPiezasMecanicas + " son de tipo<br>mecánico.<br>" +
+                        "De las eléctricas, la estación de tratamiento ha aplicado barniz normal a " + this.estacion.contadorBarnizadoNormal + " y ha<br>aplicado barniz especial a " + this.estacion.contadorBarnizadoEspecial + ".<br>" +
+                        "De las mecánicas ha galvanizado " + this.estacion.contadorGalvanizado + ", ha pintado " + this.estacion.contadorPintado + " y ha pulido " + this.estacion.contadorPulido + "."
+                }
             }
-        }
-        
-        //CLASE FACTORIA
-        function factoria(){
-            //ATRIBUTOS DE CLASE
-            this.contadorPiezas = 0;
-            this.contadorPiezasElectricas = 0;
-            this.contadorPiezasMecanicas = 0;
 
-            //FUNCIONES/MÉTODOS DE LA CLASE
-            this.generarPieza = function(){
-                contadorPiezas += 1;
+            //CLASE FACTORIA
+            function Factoria() {
+                //ATRIBUTOS DE CLASE
+                this.contadorPiezas = 0;
+                this.contadorPiezasElectricas = 0;
+                this.contadorPiezasMecanicas = 0;
+
+
+                //FUNCIONES/MÉTODOS DE LA CLASE
+                this.generarPieza = function () {
+                    if (Math.random() < 0.3) {
+                        var pieza = new PiezaElectrica();
+                        this.contadorPiezasElectricas += 1;
+                    } else {
+                        var pieza = new PiezaMecanica();
+                        this.contadorPiezasMecanicas += 1;
+                    }
+                    arrayDePiezas.push(pieza);
+                    this.contadorPiezas += 1;
+                }
             }
-        }
 
-        //CLASE ESTACION
-        function estacion(){
-            //ATRIBUTOSS
+            //CLASE ESTACION
+            function Estacion() {
+                //ATRIBUTOS
+                this.contadorBarnizadoNormal = 0;
+                this.contadorBarnizadoEspecial = 0;
+                this.contadorGalvanizado = 0;
+                this.contadorPulido = 0;
+                this.contadorPintado = 0;
 
-            //FUNCIONES
-            this.procesarPieza = function(){
-
+                //FUNCIONES
+                this.procesarPieza = function (i) {
+                    if (arrayDePiezas[i].subtipo == "Placa ABS" || arrayDePiezas[i].subtipo == "Centralita encendido" || arrayDePiezas[i].subtipo == "Bornes cableado" || arrayDePiezas[i].subtipo == "Alternador" || arrayDePiezas[i].subtipo == "Encendido") {
+                        if (arrayDePiezas[i].potencia == 1 || arrayDePiezas[i].potencia == 5) {
+                            arrayDePiezas[i].procesamiento = "Barnizada Normal";
+                            this.contadorBarnizadoNormal += 1;
+                        } else {
+                            arrayDePiezas[i].procesamiento = "Barnizada Especial";
+                            this.contadorBarnizadoEspecial += 1;
+                        }
+                    } else {
+                        if (arrayDePiezas[i].material == "Acero") {
+                            arrayDePiezas[i].procesamiento = "Galvanizada";
+                            this.contadorGalvanizado += 1;
+                        } else if (arrayDePiezas[i].material == "Titanio") {
+                            arrayDePiezas[i].procesamiento = "Pulida";
+                            this.contadorPulido += 1;
+                        } else {
+                            arrayDePiezas[i].procesamiento = "Pintada";
+                            this.contadorPintado += 1;
+                        }
+                    }
+                }
             }
-        }
-        
-        //CLASE PIEZA
-        function piezaBase(){
-            //ATRIBUTOS
-            this.nombre;
-            this.codigo;
-            this.fecha;
-        }
 
+            //CLASE PIEZA BASE
+            function PiezaBase() {
+                //ATRIBUTOS
+                this.subtipo;
+                this.codigo;
+                this.fecha;
 
+                //Asignamos la fecha en la que se creo la pieza
+                this.fecha = tiempo.getDate() + "/" + (tiempo.getMonth() + 1) + "/" + tiempo.getFullYear() + " a las " + (tiempo.getHours()) + ":" + (tiempo.getMinutes());
+            }
 
-        //CLASE PIEZA ELECTRICA
-        function piezaElectrica(){
-            this.potencia;
-            this.voltaje;
-        }
+            //CLASE PIEZA ELECTRICA
+            function PiezaElectrica() {
+                //ATRIBUTOS
+                this.potencia;
+                this.voltaje;
 
-        piezaElectrica.prototype = new piezaBase();
+                //Asignación de la potencia
+                if (Math.random() < 0.25) {
+                    this.potencia = 1;
+                } else if (0.25 <= Math.random() < 0.5) {
+                    this.potencia = 5;
+                } else if (0.5 <= Math.random() < 0.75) {
+                    this.potencia = 10;
+                } else {
+                    this.potencia = 20;
+                }
 
-        //CLASE PIEZA MECANICA
-        function piezaMecanica(){
-            this.material;
-        }
+                //Asignación del voltaje
+                if (Math.random() < 0.25) {
+                    this.voltaje = 3.3;
+                } else if (0.25 <= Math.random() < 0.5) {
+                    this.voltaje = 5;
+                } else if (0.5 <= Math.random() < 0.75) {
+                    this.voltaje = 12;
+                } else {
+                    this.voltaje = 240;
+                }
 
-        piezaMecanica.prototype = new piezaBase();
+                //Asignación del subtipo
+                if (Math.random() < 0.2) {
+                    this.subtipo = "Placa ABS";
+                } else if (0.2 <= Math.random() < 0.4) {
+                    this.subtipo = "Centralita encendido";
+                } else if (0.4 <= Math.random() < 0.6) {
+                    this.subtipo = "Bornes cableado";
+                } else if (0.6 <= Math.random() < 0.8) {
+                    this.subtipo = "Alternador";
+                } else {
+                    this.subtipo = "Encendido";
+                }
 
-        //Funciones adicionales para la elaboración de la práctica
+                //Asignación del código
+                this.codigo = obtenerEnteroAleatorio(1000000000, 10000000000) + "E";
+            }
 
-        //Devuelve un numero aleatorio entre 0 y max-1, ambos incluidos
-        function obtenerEnteroAleatorio(max){
-            return Math.floor(Math.random()* max)
-        }
+            //HERENCIA DE PIEZA BASE EN PIEZA ELECTRICA
+            PiezaElectrica.prototype = new PiezaBase();
 
+            //CLASE PIEZA MECANICA
+            function PiezaMecanica() {
+                this.material;
 
-        
+                //Asignación del material
+                if (Math.random() < 0.3) {
+                    this.material = "Acero";
+                } else if (0.3 <= Math.random() < 0.6) {
+                    this.material = "Titanio";
+                } else {
+                    this.material = "Carbono";
+                }
+
+                //Asignación del subtipo
+                if (Math.random() < 0.2) {
+                    this.subtipo = "Larguero inferior";
+                } else if (0.2 <= Math.random() < 0.4) {
+                    this.subtipo = "Guardabarros";
+                } else if (0.4 <= Math.random() < 0.6) {
+                    this.subtipo = "Larguero superior";
+                } else if (0.6 <= Math.random() < 0.8) {
+                    this.subtipo = "Subchasis";
+                } else {
+                    this.subtipo = "Puerta";
+                }
+
+                //Asignación del código
+                this.codigo = obtenerEnteroAleatorio(1000000000, 10000000000) + "M";
+            }
+
+            //HERENCIA DE PIEZA BASE EN PIEZA MECANICA
+            PiezaMecanica.prototype = new PiezaBase();
+
+            /////////////////////////////////////////////////////// GESTION DE EVENTOS ///////////////////////////////////////////////////////
+            window.onload = function () {
+                boton1.addEventListener("click", cien, false);
+                boton2.addEventListener("click", mil, false);
+            }
+
+            //Asigna a numPiezasParameter el valor 100 al pulsar sobre el primer botón
+            function cien() {
+                var miFabrica = new Fabrica(100);
+                arrayDePiezas = [];
+                miFabrica.fabricar();
+            }
+
+            //Asigna a numPiezasParameter el valor 1000 al pulsar sobre el segundo botón
+            function mil() {
+                var miFabrica = new Fabrica(1000);
+                arrayDePiezas = [];
+                miFabrica.fabricar();
+            }
+
+            /////////////////////////////////////////////////////// FUNCIONES ADICIONALES PARA LA ELABORACION DE LA PRACTICA ///////////////////////////////////////////////////////
+
+            //Devuelve un numero aleatorio entre min y max-1, ambos incluidos
+            function obtenerEnteroAleatorio(min, max) {
+                return Math.floor(Math.random() * (max - min) + min);
+            }
         </script>
     </body>
 </html>
