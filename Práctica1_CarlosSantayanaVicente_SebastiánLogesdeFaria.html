@@ -25,31 +25,22 @@
             /////////////////////////////////////////////////////// CLASES ///////////////////////////////////////////////////////
 
             //CLASE FABRICA
-            function Fabrica(numPiezasParameter) {
+            function Fabrica() {
                 //ATRIBUTOS
-                this.numPiezasAtribute = numPiezasParameter;
+                
                 this.factoria = new Factoria();
                 this.estacion = new Estacion();
 
                 //FUNCIONES
-                this.fabricar = function () {
-                    //FABRICACION DE 100 PIEZAS
-                    if (this.numPiezasAtribute == 100) {
-                        for (var i = 0; i < 100; ++i) {
-                            this.factoria.generarPieza();
-                        } for (var i = 0; i < 100; ++i) {
-                            this.estacion.procesarPieza(i);
-                        }
-
-                        //FABRICACION DE 1000 PIEZAS
-                    } else {
-                        for (var i = 0; i < 1000; ++i) {
+                this.fabricar = function (numPiezasParameter) {
+                    
+                        for (var i = 0; i < numPiezasParameter; ++i) {
                             this.factoria.generarPieza();
                         }
-                        for (var i = 0; i < 1000; ++i) {
+                        for (var i = 0; i < numPiezasParameter; ++i) {
                             this.estacion.procesarPieza(i);
                         }
-                    }
+                    
 
                     parrafo.innerHTML = "Piezas totales:<br>" +
                         "La factoría ha fabricado " + this.factoria.contadorPiezas + " de las cuales " + this.factoria.contadorPiezasElectricas + " son de tipo eléctrico y " + this.factoria.contadorPiezasMecanicas + " son de tipo<br>mecánico.<br>" +
@@ -214,16 +205,16 @@
 
             //Asigna a numPiezasParameter el valor 100 al pulsar sobre el primer botón
             function cien() {
-                var miFabrica = new Fabrica(100);
+                var miFabrica = new Fabrica();
                 arrayDePiezas = [];
-                miFabrica.fabricar();
+                miFabrica.fabricar(100);
             }
 
             //Asigna a numPiezasParameter el valor 1000 al pulsar sobre el segundo botón
             function mil() {
-                var miFabrica = new Fabrica(1000);
+                var miFabrica = new Fabrica();
                 arrayDePiezas = [];
-                miFabrica.fabricar();
+                miFabrica.fabricar(1000);
             }
 
             /////////////////////////////////////////////////////// FUNCIONES ADICIONALES PARA LA ELABORACION DE LA PRACTICA ///////////////////////////////////////////////////////
